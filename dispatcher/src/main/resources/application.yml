@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+bot:
+  name: SerjMaksTestBot
+  token: 5245134931:AAGNXzcRTkJc4shwrK27Fp4CgWoDJPBlBOU
+
+#logging:
+#   file:
+#     name: ./logs/dispatcher.log
+#   level:
+#     root: DEBUG
+#     org.bot.priceparser: DEBUG
+#     org.springframework: DEBUG
