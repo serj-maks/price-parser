@@ -21,6 +21,18 @@ public class Bot extends TelegramLongPollingBot {
     @Value("${bot.token}")
     private String token;
 
+    private UpdateController updateController;
+
+    public Bot(UpdateController updateController) {
+        this.updateController = updateController;
+    }
+
+    @PostConstruct
+    public void init() {
+        updateController.registerBot(this);
+        log.info("bot started with name: {}, token: {}", name, token);
+    }
+
     @Override
     public String getBotUsername() {
         return name;
@@ -34,19 +46,8 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-            Message message = update.getMessage();
-            SendMessage sendMessage = new SendMessage();
-            Long chatId = message.getChatId();
-            sendMessage.setChatId(String.valueOf(chatId));
-            String text = message.getText();
-            sendMessage.setText(text);
-            sendAnswerMessage(sendMessage);
+            updateController.processUpdate(update);
         }
-    }
-
-    @PostConstruct
-    public void init() {
-        log.info("bot started with name: {}, token: {}", name, token);
     }
 
     public void sendAnswerMessage(SendMessage sendMessage) {
