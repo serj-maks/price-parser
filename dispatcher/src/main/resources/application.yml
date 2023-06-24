@@ -5,6 +5,13 @@ bot:
   name: SerjMaksTestBot
   token: 5245134931:AAGNXzcRTkJc4shwrK27Fp4CgWoDJPBlBOU
 
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: pass
+
 #logging:
 #   file:
 #     name: ./logs/dispatcher.log
