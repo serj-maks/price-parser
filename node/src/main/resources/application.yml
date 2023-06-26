@@ -1,0 +1,17 @@
+server:
+  port: 8083
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: pass
+
+#logging:
+#   file:
+#     name: ./logs/node.log
+#   level:
+#     root: DEBUG
+#     org.bot.priceparser: DEBUG
+#     org.springframework: DEBUG

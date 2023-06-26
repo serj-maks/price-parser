@@ -16,6 +16,7 @@
     <modules>
         <module>dispatcher</module>
         <module>common-rabbitmq</module>
+        <module>node</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>
@@ -26,6 +27,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
         <lombok.version>1.18.24</lombok.version>
+        <telegrambots.spring.boot.starter.version>6.1.0</telegrambots.spring.boot.starter.version>
     </properties>
 
     <dependencies>
