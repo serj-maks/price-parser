@@ -8,6 +8,14 @@ spring:
     username: user
     password: pass
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: user
+    password: pass
+
+  jpa:
+    generate-ddl: true
+
 #logging:
 #   file:
 #     name: ./logs/node.log
