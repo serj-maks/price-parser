@@ -24,7 +24,6 @@ public class RawData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     Update update;
