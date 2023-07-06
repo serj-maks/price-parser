@@ -49,13 +49,13 @@ public class UpdateController {
 
     private void processTextMessageType(Update update) {
         updateProducer.produce(TEXT_MESSAGE_UPDATE, update);
-        setTextMessageReceivedView(update);
+//        setTextMessageReceivedView(update);
     }
 
-    private void setTextMessageReceivedView(Update update) {
-        SendMessage sendMessage = messageUtils.generateSendMessageWithText(update, "Message has been received, please wait...");
-        setView(sendMessage);
-    }
+//    private void setTextMessageReceivedView(Update update) {
+//        SendMessage sendMessage = messageUtils.generateSendMessageWithText(update, "Message has been received, please wait...");
+//        setView(sendMessage);
+//    }
 
     private void setUnsupportedMessageType(Update update) {
         SendMessage sendMessage = messageUtils.generateSendMessageWithText(update, "Unsupported message type, please sent only text messages");
