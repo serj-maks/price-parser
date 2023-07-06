@@ -9,14 +9,13 @@ import org.bot.priceparser.entity.enums.UserState;
 import org.bot.priceparser.service.MainService;
 import org.bot.priceparser.service.ProducerService;
 import org.bot.priceparser.service.enums.TelegramCommands;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 @Slf4j
-@Component
+@Service
 public class MainServiceImpl implements MainService {
     private final RawDataDao rawDataDao;
     private final ProducerService producerService;
@@ -63,6 +62,7 @@ public class MainServiceImpl implements MainService {
             //TODO: добавить функционал: регистрация
             return "temporary unavailable";
         } else {
+            //TODO: когда отправляю боту текст, приходит это соообщение. См. dispatcher.UpdateController
             return "unknown command! Enter /help command to see all available commands";
         }
     }
