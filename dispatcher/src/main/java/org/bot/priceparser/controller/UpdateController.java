@@ -1,7 +1,7 @@
 package org.bot.priceparser.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bot.priceparser.service.UpdateProducer;
+import org.bot.priceparser.service.messagebroker.rabbitmq.UpdateProducer;
 import org.bot.priceparser.utils.MessageUtils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

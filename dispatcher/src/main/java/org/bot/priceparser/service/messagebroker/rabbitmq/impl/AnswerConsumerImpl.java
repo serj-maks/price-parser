@@ -1,7 +1,7 @@
-package org.bot.priceparser.service.impl;
+package org.bot.priceparser.service.messagebroker.rabbitmq.impl;
 
 import org.bot.priceparser.controller.UpdateController;
-import org.bot.priceparser.service.AnswerConsumer;
+import org.bot.priceparser.service.messagebroker.rabbitmq.AnswerConsumer;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

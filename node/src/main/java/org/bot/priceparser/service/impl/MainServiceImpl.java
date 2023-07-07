@@ -5,10 +5,10 @@ import org.bot.priceparser.dao.AppUserDao;
 import org.bot.priceparser.dao.RawDataDao;
 import org.bot.priceparser.entity.AppUser;
 import org.bot.priceparser.entity.RawData;
-import org.bot.priceparser.entity.enums.UserState;
+import org.bot.priceparser.entity.enums.TelegramUserState;
 import org.bot.priceparser.service.MainService;
-import org.bot.priceparser.service.ProducerService;
-import org.bot.priceparser.service.enums.TelegramCommands;
+import org.bot.priceparser.telegram.enums.TelegramCommands;
+import org.bot.priceparser.service.messagebroker.rabbitmq.ProducerService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -31,17 +31,17 @@ public class MainServiceImpl implements MainService {
     public void processTextMessage(Update update) {
         save(update);
         AppUser appUser = findOrSaveAppUser(update);
-        UserState userState = appUser.getState();
+        TelegramUserState userState = appUser.getState();
         String command = update.getMessage().getText();
         String output = "";
 
         if (TelegramCommands.CANCEL.equals(command)) {
             //TODO: подумать над названием  метода
             output = cancelProcess(appUser);
-        } else if (UserState.BASIC.equals(userState)) {
+        } else if (TelegramUserState.BASIC.equals(userState)) {
             //TODO: подумать над названием  метода
             output = processServiceCommand(appUser, command);
-        } else if (UserState.WAIT_FOR_EMAIL.equals(userState)) {
+        } else if (TelegramUserState.WAIT_FOR_EMAIL.equals(userState)) {
             //TODO: добавить функционал: обработка e-mail
         } else {
             //TODO: завернуть в метод
@@ -81,7 +81,7 @@ public class MainServiceImpl implements MainService {
     }
 
     private String cancelProcess(AppUser appUser) {
-        appUser.setState(UserState.BASIC);
+        appUser.setState(TelegramUserState.BASIC);
         appUserDao.save(appUser);
         //TODO: english grammar check
         return "command was been canceled";
@@ -108,7 +108,7 @@ public class MainServiceImpl implements MainService {
                     //TODO: изменить значение по-умолчанию после добавления регистрации
                     .isActive(true)
                     //TODO: сделать значение BASIC по-умолчанию
-                    .state(UserState.BASIC)
+                    .state(TelegramUserState.BASIC)
                     .build();
             return appUserDao.save(transientAppUser);
         }

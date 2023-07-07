@@ -1,6 +1,6 @@
-package org.bot.priceparser.service.impl;
+package org.bot.priceparser.service.messagebroker.rabbitmq.impl;
 
-import org.bot.priceparser.service.ProducerService;
+import org.bot.priceparser.service.messagebroker.rabbitmq.ProducerService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

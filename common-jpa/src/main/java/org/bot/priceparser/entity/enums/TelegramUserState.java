@@ -1,6 +1,6 @@
 package org.bot.priceparser.entity.enums;
 
-public enum UserState {
+public enum TelegramUserState {
     BASIC,
     WAIT_FOR_EMAIL;
 }

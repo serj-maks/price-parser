@@ -2,7 +2,7 @@ package org.bot.priceparser.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.bot.priceparser.entity.enums.UserState;
+import org.bot.priceparser.entity.enums.TelegramUserState;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -31,5 +31,5 @@ public class AppUser {
     String email;
     Boolean isActive;
     @Enumerated(EnumType.STRING)
-    UserState state;
+    TelegramUserState state;
 }
