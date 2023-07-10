@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,4 +34,7 @@ public class AppUser {
     Boolean isActive;
     @Enumerated(EnumType.STRING)
     TelegramUserState state;
+
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    List<Item> items = new ArrayList<>();
 }

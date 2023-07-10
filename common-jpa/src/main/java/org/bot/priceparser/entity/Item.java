@@ -20,5 +20,10 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String link;
-    //TODO: добавить поля и связи с AppUser
+    Long startPrice;
+    Long currentPrice;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "appUser_id")
+    private AppUser appUser;
 }
