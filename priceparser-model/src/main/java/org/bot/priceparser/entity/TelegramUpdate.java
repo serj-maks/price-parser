@@ -17,7 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "update")
+@Table(name = "telegram_update")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class TelegramUpdate {
 
