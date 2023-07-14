@@ -2,9 +2,9 @@ package org.bot.priceparser.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bot.priceparser.dao.AppUserDao;
-import org.bot.priceparser.dao.RawDataDao;
+import org.bot.priceparser.dao.TelegramUpdateDao;
 import org.bot.priceparser.entity.AppUser;
-import org.bot.priceparser.entity.RawData;
+import org.bot.priceparser.entity.TelegramUpdate;
 import org.bot.priceparser.entity.enums.TelegramUserState;
 import org.bot.priceparser.service.MainService;
 import org.bot.priceparser.telegram.enums.TelegramCommands;
@@ -16,28 +16,30 @@ import org.telegram.telegrambots.meta.api.objects.User;
 
 @Slf4j
 @Service
+//TODO: разбить на сервисы, как в проекте Ильи: каждому entity свой сервис
+//можно сделать фасад для сервисов
 public class MainServiceImpl implements MainService {
-    private final RawDataDao rawDataDao;
+    private final TelegramUpdateDao telegramUpdateDao;
     private final ProducerService producerService;
     private final AppUserDao appUserDao;
 
-    public MainServiceImpl(RawDataDao rawDataDao, ProducerService producerService, AppUserDao appUserDao) {
-        this.rawDataDao = rawDataDao;
+    public MainServiceImpl(TelegramUpdateDao updateDao, ProducerService producerService, AppUserDao appUserDao) {
+        this.telegramUpdateDao = updateDao;
         this.producerService = producerService;
         this.appUserDao = appUserDao;
     }
 
     @Override
-    public void processTextMessage(Update update) {
+    public void processTextMessage(org.telegram.telegrambots.meta.api.objects.Update update) {
         save(update);
-        AppUser appUser = findOrSaveAppUser(update);
+        AppUser appUser = getByTelegramUserId(update);
         TelegramUserState userState = appUser.getState();
         String command = update.getMessage().getText();
         String output = "";
 
         if (TelegramCommands.CANCEL.equals(command)) {
             //TODO: подумать над названием  метода
-            output = cancelProcess(appUser);
+            output = cancelCommand(appUser);
         } else if (TelegramUserState.BASIC.equals(userState)) {
             //TODO: подумать над названием  метода
             output = processServiceCommand(appUser, command);
@@ -55,9 +57,9 @@ public class MainServiceImpl implements MainService {
 
     private String processServiceCommand(AppUser appUser, String command) {
         if (TelegramCommands.START.equals(command)) {
-            return start();
+            return startCommand();
         } else if (TelegramCommands.HELP.equals(command)) {
-            return help();
+            return helpCommand();
         } else if (TelegramCommands.REGISTRATION.equals(command)) {
             //TODO: добавить функционал: регистрация
             return "temporary unavailable";
@@ -67,11 +69,11 @@ public class MainServiceImpl implements MainService {
         }
     }
 
-    private String start() {
+    private String startCommand() {
         return "hello! Enter /help command to see all available commands";
     }
 
-    private String help() {
+    private String helpCommand() {
         return """
                 commands list:
                 /start
@@ -80,7 +82,7 @@ public class MainServiceImpl implements MainService {
                 /help""";
     }
 
-    private String cancelProcess(AppUser appUser) {
+    private String cancelCommand(AppUser appUser) {
         appUser.setState(TelegramUserState.BASIC);
         appUserDao.save(appUser);
         //TODO: english grammar check
@@ -96,9 +98,9 @@ public class MainServiceImpl implements MainService {
     }
 
     //TODO: разделить метод на два
-    private AppUser findOrSaveAppUser(Update update) {
+    private AppUser getByTelegramUserId(org.telegram.telegrambots.meta.api.objects.Update update) {
         User telegramUser = update.getMessage().getFrom();
-        AppUser persistentAppUser = appUserDao.findAppUserByTelegramUserId(telegramUser.getId());
+        AppUser persistentAppUser = appUserDao.findByTelegramUserId(telegramUser.getId());
         if(persistentAppUser == null) {
             AppUser transientAppUser = AppUser.builder()
                     .telegramUserId(telegramUser.getId())
@@ -116,9 +118,9 @@ public class MainServiceImpl implements MainService {
     }
 
     private void save(Update update) {
-        RawData rawData = RawData.builder()
+        TelegramUpdate telegramUpdate = TelegramUpdate.builder()
                 .update(update)
                 .build();
-        rawDataDao.save(rawData);
+        telegramUpdateDao.save(telegramUpdate);
     }
 }

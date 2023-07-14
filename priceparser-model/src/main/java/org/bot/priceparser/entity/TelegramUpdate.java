@@ -17,13 +17,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "raw_data")
+@Table(name = "update")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class RawData {
+public class TelegramUpdate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
+
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     Update update;

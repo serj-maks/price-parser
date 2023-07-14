@@ -19,6 +19,10 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "app_user")
+/*
+называется AppUser, чтобы избежать путаницы,
+т.к. есть объект TelegramUser, который тоже используется в этом приложении
+ */
 public class AppUser {
 
     @Id

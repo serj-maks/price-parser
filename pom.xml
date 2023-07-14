@@ -17,7 +17,8 @@
         <module>dispatcher</module>
         <module>common-rabbitmq</module>
         <module>node</module>
-        <module>common-jpa</module>
+        <module>priceparser-model</module>
+        <module>priceparser-api</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>

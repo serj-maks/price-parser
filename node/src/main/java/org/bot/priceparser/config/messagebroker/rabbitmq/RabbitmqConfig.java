@@ -1,4 +1,4 @@
-package org.bot.priceparser.config;
+package org.bot.priceparser.config.messagebroker.rabbitmq;
 
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
