@@ -4,5 +4,5 @@ import org.bot.priceparser.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AppUserDao extends JpaRepository<AppUser, Long> {
-    AppUser findAppUserByTelegramUserId(Long id);
+    AppUser findByTelegramUserId(Long id);
 }

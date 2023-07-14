@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +19,10 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "app_user")
+/*
+называется AppUser, чтобы избежать путаницы,
+т.к. есть объект TelegramUser, который тоже используется в этом приложении
+ */
 public class AppUser {
 
     @Id
@@ -32,4 +38,7 @@ public class AppUser {
     Boolean isActive;
     @Enumerated(EnumType.STRING)
     TelegramUserState state;
+
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    List<Item> items = new ArrayList<>();
 }
