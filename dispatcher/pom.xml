@@ -20,6 +20,12 @@
     </properties>
 
     <dependencies>
+
+<!-- //TODO: what the actuator ?! -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.bot.priceparser</groupId>
             <artifactId>common-rabbitmq</artifactId>

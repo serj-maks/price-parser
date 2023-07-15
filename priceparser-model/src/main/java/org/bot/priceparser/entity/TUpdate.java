@@ -19,7 +19,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "telegram_update")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class TelegramUpdate {
+/*
+данная сущность описывает класс Update библиотеки телеграма, но т.к. данный класс
+уже существует, название класса: TUpdate
+*/
+public class TUpdate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
