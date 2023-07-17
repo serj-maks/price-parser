@@ -2,7 +2,7 @@ package org.bot.priceparser.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.bot.priceparser.entity.enums.TelegramUserState;
+import org.bot.priceparser.entity.enums.TUserState;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -37,7 +37,7 @@ public class AppUser {
     String email;
     Boolean isActive;
     @Enumerated(EnumType.STRING)
-    TelegramUserState state;
+    TUserState state;
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     List<Item> items = new ArrayList<>();
