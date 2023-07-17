@@ -11,7 +11,7 @@ import org.bot.priceparser.repository.TUpdateRepository;
 import org.bot.priceparser.service.AppUserService;
 import org.bot.priceparser.service.TUpdateService;
 import org.bot.priceparser.service.messagebroker.rabbitmq.ProducerService;
-import org.bot.priceparser.telegram.enums.TelegramCommands;
+import org.bot.priceparser.command.enums.TelegramCommands;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;

@@ -1,4 +1,4 @@
-package org.bot.priceparser.telegram.enums;
+package org.bot.priceparser.command.enums;
 
 public enum TelegramCommands {
     START("/start"),
