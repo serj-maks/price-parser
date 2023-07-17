@@ -29,30 +29,34 @@ public class TUpdateServiceImpl implements TUpdateService {
     @Override
     public void process(Update update) {
         save(update);
-        AppUser appUser = appUserService.getByTelegramUserId(update);
-        TUserState userState = appUser.getState();
-        String command = update.getMessage().getText();
-        String output = "";
+        stateCheck(update);
+    }
 
-        if (TelegramCommands.CANCEL.equals(command)) {
-            //TODO: подумать над названием  метода
-            output = cancelCommand(appUser);
-        } else if (TUserState.BASIC.equals(userState)) {
-            //TODO: подумать над названием  метода
-            output = processServiceCommand(appUser, command);
-        } else if (TUserState.WAIT_FOR_EMAIL.equals(userState)) {
+    private void stateCheck(Update update) {
+        AppUser appUser = appUserService.getByTelegramUserId(update);
+        TUserState tUserState = appUser.getState();
+        Long chatId = update.getMessage().getChatId();
+        String commandFromUserChat = update.getMessage().getText();
+        String answerToUserChat = "";
+
+        if (TelegramCommands.CANCEL.equals(commandFromUserChat)) {
+            answerToUserChat = cancel(appUser);
+        }
+
+        if (TUserState.BASIC.equals(tUserState)) {
+            answerToUserChat = processServiceCommand(commandFromUserChat);
+        } else if (TUserState.WAIT_FOR_EMAIL.equals(tUserState)) {
             //TODO: добавить функционал: обработка e-mail
         } else {
             //TODO: завернуть в метод
-            log.error("unknown user state" + userState);
-            output = "unknown error! Enter /cancel command and try again";
+            log.error("unknown user state" + tUserState);
+            answerToUserChat = "unknown error! Enter /cancel command and try again";
         }
 
-        Long chatId = update.getMessage().getChatId();
-        sendAnswer(output, chatId);
+        sendAnswer(answerToUserChat, chatId);
     }
 
-    private String processServiceCommand(AppUser appUser, String command) {
+    private String processServiceCommand(String command) {
         if (TelegramCommands.START.equals(command)) {
             return startCommand();
         } else if (TelegramCommands.HELP.equals(command)) {
@@ -79,7 +83,7 @@ public class TUpdateServiceImpl implements TUpdateService {
                 /help""";
     }
 
-    private String cancelCommand(AppUser appUser) {
+    private String cancel(AppUser appUser) {
         appUser.setState(TUserState.BASIC);
         appUserRepository.save(appUser);
         //TODO: english grammar check
@@ -87,14 +91,15 @@ public class TUpdateServiceImpl implements TUpdateService {
     }
 
     //возвращает output с текстом отвата обратно в чат пользователю
-    private void sendAnswer(String output, Long chatId) {
+    private void sendAnswer(String answerToUserChat, Long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
-        sendMessage.setText(output);
+        sendMessage.setText(answerToUserChat);
         producerService.produceAnswer(sendMessage);
     }
 
     private void save(Update update) {
+        //TODO: можно ли здесь сделать mapper ?
         TUpdate telegramUpdate = TUpdate.builder()
                 .update(update)
                 .build();
