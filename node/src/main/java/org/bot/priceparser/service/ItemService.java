@@ -1,4 +1,9 @@
 package org.bot.priceparser.service;
 
-public interface ItemService {
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ItemService {
 }

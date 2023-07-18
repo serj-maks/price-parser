@@ -1,38 +1,33 @@
-package org.bot.priceparser.service.impl;
+package org.bot.priceparser.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.bot.priceparser.entity.AppUser;
-import org.bot.priceparser.entity.TUpdate;
-import org.bot.priceparser.entity.enums.TUserState;
-import org.bot.priceparser.repository.AppUserRepository;
-import org.bot.priceparser.repository.TUpdateRepository;
-import org.bot.priceparser.service.AppUserService;
-import org.bot.priceparser.service.TUpdateService;
-import org.bot.priceparser.service.messagebroker.rabbitmq.ProducerService;
 import org.bot.priceparser.command.enums.TelegramCommands;
+import org.bot.priceparser.entity.AppUser;
+import org.bot.priceparser.entity.enums.TUserState;
+import org.bot.priceparser.service.messagebroker.rabbitmq.ProducerService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TUpdateServiceImpl implements TUpdateService {
+public class MainMenuService {
 
-    private final TUpdateRepository tUpdateRepository;
-    private final AppUserRepository appUserRepository;
+    private final TUpdateService tUpdateService;
     private final AppUserService appUserService;
     private final ProducerService producerService;
 
-    @Override
+    @Transactional
     public void process(Update update) {
-        save(update);
         stateCheck(update);
+        tUpdateService.save(update);
     }
 
-    private void stateCheck(Update update) {
+    @Transactional
+    public void stateCheck(Update update) {
         AppUser appUser = appUserService.getByTelegramUserId(update);
         TUserState tUserState = appUser.getState();
         Long chatId = update.getMessage().getChatId();
@@ -83,9 +78,10 @@ public class TUpdateServiceImpl implements TUpdateService {
                 /help""";
     }
 
-    private String cancel(AppUser appUser) {
+    @Transactional
+    public String cancel(AppUser appUser) {
         appUser.setState(TUserState.BASIC);
-        appUserRepository.save(appUser);
+        appUserService.save(appUser);
         //TODO: english grammar check
         return "command was been canceled";
     }
@@ -96,13 +92,5 @@ public class TUpdateServiceImpl implements TUpdateService {
         sendMessage.setChatId(chatId);
         sendMessage.setText(answerToUserChat);
         producerService.produceAnswer(sendMessage);
-    }
-
-    private void save(Update update) {
-        //TODO: можно ли здесь сделать mapper ?
-        TUpdate telegramUpdate = TUpdate.builder()
-                .update(update)
-                .build();
-        tUpdateRepository.save(telegramUpdate);
     }
 }
