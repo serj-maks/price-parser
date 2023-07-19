@@ -34,12 +34,8 @@ public class MainMenuService {
         String commandFromUserChat = update.getMessage().getText();
         String answerToUserChat = "";
 
-        if (TelegramCommands.CANCEL.equals(commandFromUserChat)) {
-            answerToUserChat = cancel(appUser);
-        }
-
         if (TUserState.BASIC.equals(tUserState)) {
-            answerToUserChat = processServiceCommand(commandFromUserChat);
+            answerToUserChat = processServiceCommand(appUser, commandFromUserChat);
         } else if (TUserState.WAIT_FOR_EMAIL.equals(tUserState)) {
             //TODO: добавить функционал: обработка e-mail
         } else {
@@ -48,12 +44,15 @@ public class MainMenuService {
             answerToUserChat = "unknown error! Enter /cancel command and try again";
         }
 
+        //TODO: команда должна отвечать, а не метода stateCheck
         sendAnswer(answerToUserChat, chatId);
     }
 
-    private String processServiceCommand(String command) {
+    private String processServiceCommand(AppUser appUser, String command) {
         if (TelegramCommands.START.equals(command)) {
             return startCommand();
+        } else if (TelegramCommands.CANCEL.equals(command)) {
+            return cancelCommand(appUser);
         } else if (TelegramCommands.HELP.equals(command)) {
             return helpCommand();
         } else if (TelegramCommands.REGISTRATION.equals(command)) {
@@ -79,7 +78,7 @@ public class MainMenuService {
     }
 
     @Transactional
-    public String cancel(AppUser appUser) {
+    public String cancelCommand(AppUser appUser) {
         appUser.setState(TUserState.BASIC);
         appUserService.save(appUser);
         //TODO: english grammar check
