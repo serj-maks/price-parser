@@ -1,5 +1,6 @@
-package org.bot.priceparser.command;
+package org.bot.priceparser.service;
 
+import org.bot.priceparser.command.Command;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public class CommandService {
         this.commandMap = list.stream().collect(Collectors.toMap(Command::getTelegramCommand, Function.identity()));
     }
 
-    public void runCommand(Command command) {
+    public String runCommand(Command command) {
         //TODO: почему не могу использовать command ?
         Command command1 = commandMap.get(command.getTelegramCommand());
-        command1.execute();
+        return command1.execute();
     }
 }

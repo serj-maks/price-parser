@@ -16,9 +16,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class MainMenuService {
 
-    private final TUpdateService tUpdateService;
     private final AppUserService appUserService;
     private final ProducerService producerService;
+    private final CommandService commandService;
 
     @Transactional
     public void process(Update update) {

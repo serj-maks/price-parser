@@ -1,9 +1,9 @@
 package org.bot.priceparser.command;
 
-import lombok.RequiredArgsConstructor;
 import org.bot.priceparser.command.enums.TelegramCommands;
-import org.bot.priceparser.entity.enums.TUserState;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Help implements Command {
 
     @Override
