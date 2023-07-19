@@ -22,12 +22,6 @@ public class MainMenuService {
 
     @Transactional
     public void process(Update update) {
-        stateCheck(update);
-        tUpdateService.save(update);
-    }
-
-    @Transactional
-    public void stateCheck(Update update) {
         AppUser appUser = appUserService.getByTelegramUserId(update);
         TUserState tUserState = appUser.getState();
         Long chatId = update.getMessage().getChatId();
@@ -44,7 +38,7 @@ public class MainMenuService {
             answerToUserChat = "unknown error! Enter /cancel command and try again";
         }
 
-        //TODO: команда должна отвечать, а не метода stateCheck
+        //TODO: команда должна отвечать, а не метод process
         sendAnswer(answerToUserChat, chatId);
     }
 
