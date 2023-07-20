@@ -3,7 +3,7 @@ package org.bot.priceparser.service;
 import lombok.RequiredArgsConstructor;
 
 import org.bot.priceparser.entity.AppUser;
-import org.bot.priceparser.entity.enums.TUserState;
+import org.bot.priceparser.entity.enums.BotState;
 import org.bot.priceparser.repository.AppUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class AppUserService {
                     //TODO: изменить значение по-умолчанию после добавления регистрации
                     .isActive(true)
                     //TODO: сделать значение BASIC по-умолчанию
-                    .state(TUserState.BASIC)
+                    .state(BotState.BASIC)
                     .build();
             return appUserRepository.save(transientAppUser);
         }

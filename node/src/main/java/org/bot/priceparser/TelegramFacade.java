@@ -1,10 +1,12 @@
-package org.bot.priceparser.service;
+package org.bot.priceparser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bot.priceparser.cache.UserCache;
 import org.bot.priceparser.command.enums.TelegramCommands;
 import org.bot.priceparser.entity.AppUser;
-import org.bot.priceparser.entity.enums.TUserState;
+import org.bot.priceparser.entity.enums.BotState;
+import org.bot.priceparser.service.AppUserService;
 import org.bot.priceparser.service.messagebroker.rabbitmq.ProducerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,48 +16,36 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MainMenuService {
+public class TelegramFacade {
 
-    private final AppUserService appUserService;
     private final ProducerService producerService;
-    private final CommandService commandService;
 
-    @Transactional
-    public void process(Update update) {
-        AppUser appUser = appUserService.getByTelegramUserId(update);
-        TUserState tUserState = appUser.getState();
+    public void handleUpdate(Update update) {
+        String inputMessage = update.getMessage().getText();
         Long chatId = update.getMessage().getChatId();
-        String commandFromUserChat = update.getMessage().getText();
-        String answerToUserChat = "";
-
-        if (TUserState.BASIC.equals(tUserState)) {
-            answerToUserChat = processServiceCommand(appUser, commandFromUserChat);
-        } else if (TUserState.WAIT_FOR_EMAIL.equals(tUserState)) {
-            //TODO: добавить функционал: обработка e-mail
-        } else {
-            //TODO: завернуть в метод
-            log.error("unknown user state" + tUserState);
-            answerToUserChat = "unknown error! Enter /cancel command and try again";
-        }
-
-        //TODO: команда должна отвечать, а не метод process
-        sendAnswer(answerToUserChat, chatId);
+        BotState botState;
+        String outputMessage = processServiceCommand(inputMessage);
+        sendAnswer(outputMessage, chatId);
     }
 
-    private String processServiceCommand(AppUser appUser, String command) {
+    private String processServiceCommand(String command) {
         if (TelegramCommands.START.equals(command)) {
             return startCommand();
         } else if (TelegramCommands.CANCEL.equals(command)) {
-            return cancelCommand(appUser);
+            return cancelCommand();
         } else if (TelegramCommands.HELP.equals(command)) {
             return helpCommand();
         } else if (TelegramCommands.REGISTRATION.equals(command)) {
             //TODO: добавить функционал: регистрация
-            return "temporary unavailable";
+            return registrationCommand();
         } else {
             //TODO: когда отправляю боту текст, приходит это соообщение. См. dispatcher.UpdateController
             return "unknown command! Enter /help command to see all available commands";
         }
+    }
+
+    private String registrationCommand() {
+        return "temporary unavailable";
     }
 
     private String startCommand() {
@@ -71,10 +61,7 @@ public class MainMenuService {
                 /help""";
     }
 
-    @Transactional
-    public String cancelCommand(AppUser appUser) {
-        appUser.setState(TUserState.BASIC);
-        appUserService.save(appUser);
+    public String cancelCommand() {
         //TODO: english grammar check
         return "command was been canceled";
     }

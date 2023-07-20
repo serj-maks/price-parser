@@ -17,18 +17,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "telegram_update")
+@Table(name = "app_update")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-/*
-данная сущность описывает класс Update библиотеки телеграма, но т.к. данный класс
-уже существует, название класса: TUpdate
-*/
-public class TUpdate {
+//данная сущность описывает класс Update библиотеки телеграма
+public class AppUpdate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-
+    Long id;
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     Update update;

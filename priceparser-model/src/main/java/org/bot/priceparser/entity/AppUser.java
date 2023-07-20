@@ -2,7 +2,7 @@ package org.bot.priceparser.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.bot.priceparser.entity.enums.TUserState;
+import org.bot.priceparser.entity.enums.BotState;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -19,10 +19,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "app_user")
-/*
-называется AppUser, чтобы избежать путаницы,
-т.к. есть объект TelegramUser, который тоже используется в этом приложении
- */
+//данная сущность описывает юзера телеграмма
 public class AppUser {
 
     @Id
@@ -37,7 +34,7 @@ public class AppUser {
     String email;
     Boolean isActive;
     @Enumerated(EnumType.STRING)
-    TUserState state;
+    BotState state;
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     List<Item> items = new ArrayList<>();
