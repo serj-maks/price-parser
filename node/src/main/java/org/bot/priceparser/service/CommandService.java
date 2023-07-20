@@ -15,12 +15,11 @@ public class CommandService {
     private final Map<String, Command> commandMap;
 
     public CommandService(List<Command> list) {
-        this.commandMap = list.stream().collect(Collectors.toMap(Command::getTelegramCommand, Function.identity()));
+        this.commandMap = list.stream().collect(Collectors.toMap(Command::toString, Function.identity()));
     }
 
     public String runCommand(Command command) {
-        //TODO: почему не могу использовать command ?
-        Command command1 = commandMap.get(command.getTelegramCommand());
+        Command command1 = commandMap.get(command.toString());
         return command1.execute();
     }
 }

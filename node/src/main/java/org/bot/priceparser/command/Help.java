@@ -22,7 +22,7 @@ public class Help implements Command {
     }
 
     @Override
-    public String getTelegramCommand() {
+    public String toString() {
         return TelegramCommands.HELP.toString();
     }
 }
