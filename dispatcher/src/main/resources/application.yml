@@ -6,7 +6,7 @@ server:
 bot:
   name: SerjMaksTestBot
   token: 5245134931:AAGNXzcRTkJc4shwrK27Fp4CgWoDJPBlBOU
-  url: https://d3c2-109-197-204-107.ngrok-free.app
+  url: https://1cdb-176-214-171-191.ngrok.io
 
 spring:
   rabbitmq:

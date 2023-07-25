@@ -25,21 +25,14 @@ public class Bot extends TelegramWebhookBot {
     @Value("${bot.url}")
     private String url;
 
-    private UpdateController updateController;
-
-    public Bot(UpdateController updateController) {
-        this.updateController = updateController;
-    }
-
     @PostConstruct
     public void init() {
-        updateController.registerBot(this);
-        log.info("bot started with name: {}, token: {}", name, token);
         SetWebhook setWebhook = SetWebhook.builder()
                 .url(url)
                 .build();
         try {
             this.setWebhook(setWebhook);
+            log.info("bot started with name: {}, token: {}", name, token);
         } catch (TelegramApiException e) {
             log.error(e.toString());
         }
@@ -60,6 +53,12 @@ public class Bot extends TelegramWebhookBot {
         return "/update";
     }
 
+    //не понадобился, поэтому оставил без реализации
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        return null;
+    }
+
     public void sendAnswerMessage(SendMessage sendMessage) {
         if (sendMessage != null) {
             try {
@@ -69,11 +68,5 @@ public class Bot extends TelegramWebhookBot {
                 log.error("Failed to send message: \"{}\" to chatId: {} due to error: {}", sendMessage.getText(), sendMessage.getChatId(), e.getMessage());
             }
         }
-    }
-
-    //не понадобился, поэтому оставил без реализации
-    @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        return null;
     }
 }

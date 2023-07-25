@@ -10,6 +10,7 @@ import static org.bot.priceparser.RabbitQueue.*;
 @Service
 @RequiredArgsConstructor
 public class ProducerService {
+
     private final RabbitTemplate rabbitTemplate;
 
     public void produceAnswer(SendMessage sendMessage) {

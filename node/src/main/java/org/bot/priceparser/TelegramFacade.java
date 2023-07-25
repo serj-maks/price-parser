@@ -2,17 +2,11 @@ package org.bot.priceparser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bot.priceparser.cache.UserCache;
 import org.bot.priceparser.command.enums.TelegramCommands;
-import org.bot.priceparser.entity.AppUser;
-import org.bot.priceparser.entity.enums.BotState;
-import org.bot.priceparser.service.AppUserService;
-import org.bot.priceparser.service.CommandService;
 import org.bot.priceparser.service.messagebroker.rabbitmq.ProducerService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Slf4j
 @Service
@@ -20,12 +14,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramFacade {
 
     private final ProducerService producerService;
-    private final CommandService commandService;
 
-    public void handleUpdate(Update update) {
-        String inputMessage = update.getMessage().getText();
-        Long chatId = update.getMessage().getChatId();
-        BotState botState;
+    public void handleMessage(Message message) {
+        String inputMessage = message.getText();
+        Long chatId = message.getChatId();
         String outputMessage = processServiceCommand(inputMessage);
         sendAnswer(outputMessage, chatId);
     }
@@ -38,7 +30,6 @@ public class TelegramFacade {
         } else if (TelegramCommands.HELP.equals(command)) {
             return helpCommand();
         } else if (TelegramCommands.REGISTRATION.equals(command)) {
-            //TODO: добавить функционал: регистрация
             return registrationCommand();
         } else {
             //TODO: когда отправляю боту текст, приходит это соообщение. См. dispatcher.UpdateController
@@ -64,7 +55,6 @@ public class TelegramFacade {
     }
 
     public String cancelCommand() {
-        //TODO: english grammar check
         return "command was been canceled";
     }
 
